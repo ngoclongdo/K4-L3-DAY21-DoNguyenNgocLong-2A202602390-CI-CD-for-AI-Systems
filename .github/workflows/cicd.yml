@@ -129,12 +129,18 @@ jobs:
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          # Giai ma base64 neu key duoc luu dang base64, nguoc lai ghi truc tiep
+          if echo "$SSH_KEY" | base64 -d > ~/.ssh/deploy_key 2>/dev/null && grep -q "PRIVATE KEY" ~/.ssh/deploy_key; then
+            echo "Loaded SSH key from base64 encoding."
+          else
+            echo "$SSH_KEY" > ~/.ssh/deploy_key
+          fi
           chmod 600 ~/.ssh/deploy_key
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key "$SERVER_USER@$SERVER_HOST" "
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key "$SERVER_USER@$SERVER_HOST" "
             sudo systemctl restart income-api
             sleep 5
             curl -sf http://localhost:8080/healthz && echo 'Health check passed.' || exit 1
           "
+
 
 
