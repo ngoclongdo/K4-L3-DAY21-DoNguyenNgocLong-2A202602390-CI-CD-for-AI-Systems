@@ -27,21 +27,13 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | Lần chạy | n_estimators | learning_rate | max_depth | f1_score | accuracy |
 |---|---|---|---|---|---|
-| 1 | ___ | ___ | ___ | ___ | ___ |
-| 2 | ___ | ___ | ___ | ___ | ___ |
-| 3 | ___ | ___ | ___ | ___ | ___ |
+| 1 | 100 | 0.1 | 3 | 0.7109 | 0.8780 |
+| 2 | 50 | 0.05 | 2 | 0.6051 | 0.8460 |
+| 3 | 200 | 0.1 | 5 | 0.7149 | 0.8740 |
 
-**Bộ siêu tham số đã chọn:** `n_estimators=___`, `learning_rate=___`, `max_depth=___`.
+**Bộ siêu tham số đã chọn:** `n_estimators=200`, `learning_rate=0.1`, `max_depth=5`.
 
-**Lý do:** ___
-
-<!--
-Trả lời trong phần Lý do:
-  - Vì sao bộ này tốt hơn các bộ còn lại (dựa trên f1_score, không phải accuracy)?
-  - Lần chạy có accuracy cao nhất có trùng với lần có f1_score cao nhất không?
-    Nếu không, điều đó nói lên điều gì?
-  - Bạn quan sát thấy đánh đổi nào giữa n_estimators và learning_rate?
--->
+**Lý do:** Bộ siêu tham số ở lần chạy 3 đạt chỉ số `f1_score` cao nhất (0.7149), vượt qua ngưỡng quy định của Quality Gate (>= 0.65). Mặc dù lần chạy 1 có `accuracy` cao hơn một chút (0.8780 so với 0.8740), nhưng `f1_score` của lần 3 lại tốt hơn rõ rệt trên lớp thiểu số (thu nhập > 50K), cho thấy accuracy cao nhất không đồng nghĩa với khả năng phân loại tốt nhất trên dữ liệu mất cân bằng. Quan sát thực tế cho thấy sự đánh đổi: khi giảm `n_estimators` và `learning_rate` (lần 2), mô hình bị underfitting khiến `f1_score` sụt giảm mạnh xuống 0.6051; trong khi đó việc tăng độ sâu cây lên 5 cùng 200 estimators giúp mô hình nắm bắt tốt hơn các đặc trưng phức tạp.
 
 ---
 
